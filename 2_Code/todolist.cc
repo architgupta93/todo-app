@@ -18,7 +18,7 @@ ToDoListEntry::ToDoListEntry()
     prev_todo_entry = NULL;
 }
 
-ToDoListEntry::ToDoListEntry(string todo_message):m_todo_message(todo_message)
+ToDoListEntry::ToDoListEntry(std::string todo_message):m_todo_message(todo_message)
 {
     m_done = false;
     next_todo_entry = NULL;
@@ -35,6 +35,15 @@ void ToDoListEntry::set_prev_todo_entry(ToDoListEntry* entry)
     prev_todo_entry = entry;
 }
 
+void ToDoListEntry::skip_me()
+{
+    // This function removes a todo entry from the list by setting
+    // the prev and next entries of its 'next' and 'prev' entries
+    // respectively. Its simple. It only sounds tricky
+    prev_todo_entry->set_next_todo_entry(next_todo_entry);
+    next_todo_entry->set_prev_todo_entry(prev_todo_entry);
+}
+
 // Function definitions for ToDoList Class
 
 ToDoList::ToDoList()
@@ -47,21 +56,17 @@ bool ToDoList::remove_todo_entry(ToDoListEntry* list_entry)
 {
     try
     {
-       list_entry.prev_todo_entry->set_next_todo_entry
-           (list_entry.next_todo_entry);
-       list_entry.next_todo_entry->set_prev_todo_entry
-           (list_entry.prev_todo_entry);
+        list_entry->skip_me();
     }
     catch (std::exception e)
     {
-
         return FAILURE;
     }
        
     return true;
 }
 
-void ToDoList::new_todo_entry(string todo_message)
+void ToDoList::new_todo_entry(std::string todo_message)
 {
     ToDoListEntry* new_entry = new ToDoListEntry(todo_message);
     last_todo_entry->set_next_todo_entry(new_entry);

@@ -8,19 +8,21 @@
 #ifndef __USER_H_INCLUDED__
 #define __USER_H_INCLUDED__
     
-#include <string.h>
+#include <string>
+#include <ncurses.h>
+
 class User
 {
     public:
         // Writing constructors for the class first
         User();
-        User(string username);
+        User(std::string username);
         
         // getting the user name. Look into the requirement of other function
         // calls for this class
-        string get_user_name();
+        std::string get_user_name();
 
     private:
-        string m_user_name;
+        std::string m_user_name;
 };
 #endif

@@ -10,16 +10,15 @@
 User::User()
 {
     m_user_name = "";
-    comment("WARNING: No username assigned. Please ensure that we are 
-            running DEBUG MODE");
+    printw("WARNING: No username assigned. Please ensure that we are running DEBUG MODE");
 }
 
-User::User(string username):m_user_name(username)
+User::User(std::string username):m_user_name(username)
 {
-    comment("User %s created", username);
+    printw("User %s created", username);
 }
 
-string User::get_user_name()
+std::string User::get_user_name()
 {
     return m_user_name;
 }

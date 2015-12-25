@@ -10,18 +10,20 @@
 #define __TODOLIST_H_INCLUDED__
 
 #include "definitions.h"
+#include <string>
 
 class ToDoListEntry
 {
     public:
         // Writing constructors for the class first
         ToDoListEntry();
-        ToDoListEntry(string todo_message);
+        ToDoListEntry(std::string todo_message);
 
         // Functions for setting up the pointers for next and previous elements
         // in a doubly linked list
         void set_next_todo_entry(ToDoListEntry* entry);
         void set_prev_todo_entry(ToDoListEntry* entry);
+        void skip_me();
 
     protected:
         ToDoListEntry* next_todo_entry;
@@ -29,7 +31,7 @@ class ToDoListEntry
 
     private:
         bool m_done;
-        string m_todo_message;
+        std::string m_todo_message;
 };
 
 class ToDoList
@@ -40,7 +42,7 @@ class ToDoList
         ToDoList();
 
         // functionality for adding and removing items from the ToDoList
-        void new_todo_entry(string todo_message);
+        void new_todo_entry(std::string todo_message);
         bool remove_todo_entry(ToDoListEntry* list_entry);
 
     private:
