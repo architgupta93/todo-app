@@ -12,6 +12,7 @@ int DisplayHandler::MAX_X = 0;
 int DisplayHandler::MAX_Y = 0;
 int DisplayHandler::d_x = 0;
 int DisplayHandler::d_y = 0;
+std::string DisplayHandler::banner_text = "Welcome to the ToDo Application!\nPress any key to continue ...";
 
 // Since these are static variables for this class, the compiler doesn't know
 // where to place them (in the memory). If they were associated to any
@@ -34,12 +35,26 @@ void DisplayHandler::initialize()
     // set to the valuses from the screen
     
     getmaxyx(stdscr, MAX_Y, MAX_X);
-    raw();
+    noecho();   // Stops getc() from printing text on the screen
+    raw();      // The raw() function lets us read keyboard strokes before 
+                // a line is completed (return is pressed) -- line buffering
+    banner(banner_text);
+    try{
+        curs_set(0);    // Make the cursor invisible (I don't like the cursor) -__-
+    }
+    catch (std::exception e)
+    {
+        // TODO: Add message to be passed onto a log file. I think having a log
+        // file is a nice idea for an kind of application, as long as you don't
+        // dump a line into it every second or two
+    }
+    getch();    // The user can press any key to continue to the next window
+    clear();    // Clearing the stdscr to be used by other windows
+    refresh();  
 }
 
 void DisplayHandler::terminate()
 {
-    getch();
     endwin();
 }
 
@@ -48,6 +63,26 @@ void DisplayHandler::print_line_in_middle(std::string line, int y_level)
     int string_length = line.length();
     int startx = (MAX_X-string_length)/2;
     mvprintw(y_level, startx, "%s", line.c_str());
+}
+
+WINDOW* DisplayHandler::setup_main_window()
+{
+    // Usage: setup_main_window(height, width, start_y, start_x)
+    // This creates a window with the given specifications
+    return setup_window(MAX_Y, MAX_X, 0, 0);
+}
+
+WINDOW* DisplayHandler::setup_window(int height, int width, int starty, int startx)
+{
+    main_window = newwin(height, width, starty, startx);
+    box(main_window, 0, 0);
+
+    // The steps mentioned above only modify the internal data structures. In
+    // order to actually modify what is hwon on the screen, we need to call the
+    // refresh window function which updates the contents on the screen as well
+
+    wrefresh(main_window);
+    return main_window;
 }
 
 void DisplayHandler::banner(std::string message)

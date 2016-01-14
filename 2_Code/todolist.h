@@ -10,6 +10,7 @@
 #define __TODOLIST_H_INCLUDED__
 
 #include "definitions.h"
+#include <ncurses.h>
 #include <string>
 
 class ToDoListEntry
@@ -23,15 +24,22 @@ class ToDoListEntry
         // in a doubly linked list
         void set_next_todo_entry(ToDoListEntry* entry);
         void set_prev_todo_entry(ToDoListEntry* entry);
-        void skip_me();
-
-    protected:
-        ToDoListEntry* next_todo_entry;
-        ToDoListEntry* prev_todo_entry;
+        ToDoListEntry* get_prev_todo_entry(){ return prev_todo_entry; }
+        ToDoListEntry* get_next_todo_entry(){ return next_todo_entry; }
+        void remove_from_list();
+        void print(WINDOW* win, int y_offset, bool highlight);
+        void clear(WINDOW* win, int y_offset);
+        void refresh(WINDOW* win, int y_offset, bool highlight);
+        int get_message_length(){ return message_length; }
+        void toggle_mark_unmark(){ m_done = !m_done; }
 
     private:
         bool m_done;
         std::string m_todo_message;
+        int message_length;     // This refers to the number of lines that will
+                                // be required to print this todo-message
+        ToDoListEntry* next_todo_entry;
+        ToDoListEntry* prev_todo_entry;
 };
 
 class ToDoList
@@ -44,10 +52,21 @@ class ToDoList
         // functionality for adding and removing items from the ToDoList
         void new_todo_entry(std::string todo_message);
         bool remove_todo_entry(ToDoListEntry* list_entry);
+        ToDoListEntry* get_list_top(){ return first_todo_entry; }
 
     private:
         ToDoListEntry* first_todo_entry;
         ToDoListEntry* last_todo_entry;
+};
+
+class SampleToDoList : public ToDoList
+{
+    // This class serves as an example for testing and verification purposes. We
+    // will assign static todo items than can be used to test displaying
+    // contents on screen, navigating through to-do items etc.
+
+    public:
+        SampleToDoList();
 };
 
 #endif

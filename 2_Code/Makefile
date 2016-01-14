@@ -14,7 +14,7 @@ LDFLAGS += $(LIBFLAGS)
 
 CCFLAGS =
 
-C_SRCS = $(wildcard *.cc)
+C_SRCS = $(wildcard *.cpp)
 
 # The wildcard function picks up all the files that end with the .cc extension
 # and puts them together in a data structure. We are using this to tell the
@@ -22,7 +22,7 @@ C_SRCS = $(wildcard *.cc)
 # will, in turn, be generated from the .cc files. Gathering the .cc files
 # together here
 
-OBJS = $(patsubst %.cc, %.o, $(C_SRCS))
+OBJS = $(patsubst %.cpp, %.o, $(C_SRCS))
 
 # The patsubst function substitutes the .cc pattern with .o in the $(C_SRCS)
 # that we had previously generated. We can now say that the final executable
@@ -31,8 +31,10 @@ OBJS = $(patsubst %.cc, %.o, $(C_SRCS))
 todo-list: $(OBJS)
 	$(CC) $(CCFLAGS) $(LDFLAGS) -o $@ $+
 
-%.o:%.cc
+%.o:%.cpp
 	$(CC) $(CCFLAGS) -c -o $@ $<
+
+comments:
 									# The -c option prevents the linker from
 									# linking the code. As a result of this,
 									# we don't have to provide the ncurses
