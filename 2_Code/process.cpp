@@ -57,13 +57,18 @@ void ListPreviewManager::process(char input)
             case INPUT:\
                 if (m_mode == NON_FUNC_MODE)\
                 {\
-                    mvwprintw(list_window, m_cursor_x++, m_cursor_y++, "%s", INPUT);\
+                   entry_under_cursor->insert_text(list_window, m_cursor_y,\
+                     m_cursor_x, INPUT);\
+                    wrefresh(list_window);\
                 } else {\
                     FUNCTION(); \
                 }  break;
         #include "keystrokes.def"
         #undef F_DEF
         default:
+            entry_under_cursor->insert_text(list_window, m_cursor_y, m_cursor_x, 
+                input);
+            wrefresh(list_window);
             // TODO: Add another window to the screen that flashes text messages
             // when a known/unknow key is pressed, saying what the key does
             break;
@@ -76,6 +81,7 @@ void ListPreviewManager::move_cursor_left(){
     if (m_mode == EDIT)
     {
         wmove(list_window, m_cursor_y, --m_cursor_x);
+        wrefresh(list_window);
     }
 }
 
@@ -83,6 +89,7 @@ void ListPreviewManager::move_cursor_right(){
     if (m_mode == EDIT)
     {
         wmove(list_window, m_cursor_y, ++m_cursor_x);
+        wrefresh(list_window);
     }
 }
 
@@ -133,8 +140,9 @@ void ListPreviewManager::switch_to_edit_mode(){
     if (m_mode == VISUAL)
     {
         m_mode = EDIT;
-        wmove(list_window, m_cursor_y, X_OFFSET);
         curs_set(m_mode);
+        entry_under_cursor->refresh(list_window, m_cursor_y, false);
+        wmove(list_window, m_cursor_y, X_OFFSET);
         wrefresh(list_window);
     }
 }
@@ -149,6 +157,7 @@ void ListPreviewManager::switch_to_visual_mode(){
 void ListPreviewManager::switch_to_insert_mode(){
     m_mode = INSERT;
     curs_set(m_mode);
+    entry_under_cursor->refresh(list_window, m_cursor_y, false);
     wmove(list_window, m_cursor_y, m_cursor_x);
     wrefresh(list_window);
 }

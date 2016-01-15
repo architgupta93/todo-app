@@ -32,12 +32,14 @@ class ToDoListEntry
         void refresh(WINDOW* win, int y_offset, bool highlight);
         int get_message_length(){ return message_length; }
         void toggle_mark_unmark(){ m_done = !m_done; }
+        void insert_text(WINDOW* win, int& cursor_y, int& cursor_x, char input_key);
 
     private:
         bool m_done;
         std::string m_todo_message;
         int message_length;     // This refers to the number of lines that will
                                 // be required to print this todo-message
+        unsigned cursor_y_position_from_top;
         ToDoListEntry* next_todo_entry;
         ToDoListEntry* prev_todo_entry;
 };

@@ -13,10 +13,7 @@
 
 ToDoListEntry::ToDoListEntry()
 {
-    m_done = false;
-    m_todo_message = "";
-    next_todo_entry = NULL;
-    prev_todo_entry = NULL;
+    ToDoListEntry("");
 }
 
 ToDoListEntry::ToDoListEntry(std::string todo_message):
@@ -29,10 +26,16 @@ ToDoListEntry::ToDoListEntry(std::string todo_message):
     MAX_X);
     next_todo_entry = NULL;
     prev_todo_entry = NULL;
+    cursor_y_position_from_top = 0;
 }
 
 void ToDoListEntry::print(WINDOW* win, int y_offset, bool highlight)
 {
+    // Functions in this class only update the internal data structures in the
+    // WINDOW class. The refresh of the screen is handled by ListPreviewManager.
+    // We should not have any wrefresh operations here. This is done so that the
+    // latter class can handle multiple internal changes before actually
+    // displaying them on the screen.
     if(highlight)
     {
         wattron(win, A_STANDOUT);
@@ -93,8 +96,44 @@ void ToDoListEntry::remove_from_list()
         // block. The only tricky part is the case when this happens to be the
         // only entry in the list. In that case, we don't really have any
         // pointers to update. TODO: Keep in mind that this instance has to be
-        // erased and the firs/last entries of the list have to be updated
+        // erased and the first/last entries of the list have to be updated
         // whenever this function is called
+    }
+}
+
+void ToDoListEntry::insert_text(WINDOW* win, int& cursor_y, int& cursor_x,
+    char input_key)
+{
+    // I don't plan on keeping all the keys valid. The definitions.h file has
+    // a description for the first and last ascii characters from the ASCII
+    // table. These characters can be used in the INSERT mode. Nothing will
+    // hapeen if you try to use any other keys/key-combinations. The only other
+    // keys that are supported are BACKSPACE and DEL (also defined in the file
+    // definitions.h
+
+    unsigned position_wrt_string = cursor_y_position_from_top*MAX_X + 
+    ((unsigned)cursor_x - X_OFFSET);
+    if ((input_key >= (char) FIRST_WRITABLE_ASCII_CHAR) && (input_key <= (char)
+LAST_WRITEABLE_ASCII_CHAR))
+    {
+        // Usage: string.insert(<where_to_insert>, <how_many_characters>, <>);
+        m_todo_message.insert(position_wrt_string, 1, input_key);
+        refresh(win, cursor_y-cursor_y_position_from_top, false);
+        wmove(win, cursor_y, ++cursor_x);
+    } 
+    else if (input_key == (char) M_KEY_BACKSPACE)
+    {
+        if (position_wrt_string>0)
+        {
+            m_todo_message.erase(m_todo_message.begin()+position_wrt_string-1);
+            refresh(win, cursor_y-cursor_y_position_from_top, false);
+            wmove(win, cursor_y, --cursor_x);
+        }
+    } 
+    else if (input_key == (char) M_KEY_DELETE)
+    {
+        m_todo_message.erase(m_todo_message.begin()+position_wrt_string-1);
+        refresh(win, cursor_y-cursor_y_position_from_top, false);
     }
 }
 
