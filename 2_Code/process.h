@@ -11,6 +11,7 @@
 #include "user.h"
 #include "todolist.h"
 #include "definitions.h"
+#include <ncurses.h>
 
 enum PreviewMode{
     VISUAL,
@@ -20,13 +21,26 @@ enum PreviewMode{
 
 char valid_keystroke(DisplayHandler* display, char input);
 
-class ListPreviewManager
+class PreviewManager
+{
+    public:
+        PreviewManager();
+        bool exit_signal() { return m_exit_signal; }
+
+    protected:      // Can be accessed by functions of child classes
+        WINDOW* win;            // Window in which this list class will be displayed
+        PreviewMode m_mode;
+        bool m_exit_signal;
+        int m_cursor_y;
+        int m_cursor_x;
+};
+
+class ListPreviewManager : public PreviewManager
 {
     public:
         ListPreviewManager();
-        ListPreviewManager(WINDOW* win, ToDoList* td);
+        ListPreviewManager(WINDOW* _win, ToDoList* td);
         void print_todo_list_in_window(ToDoListEntry* first_entry_to_print);
-        bool exit_signal(){ return m_exit_signal; }
         void process(char input);
 
     protected:
@@ -40,15 +54,13 @@ class ListPreviewManager
         void two_tap_delete();
         void toggle_mark_unmark();
         void two_tap_quit();
+        void step_modes_back();
+        void add_todo_entry();
 
     private:
-        WINDOW* list_window;    // Window in which this list will be displayed
         ToDoList* td_list;      // The todo list whose preview is being managed
                                 // by this manager
         ToDoListEntry* entry_under_cursor;
-        PreviewMode m_mode;
-        bool m_exit_signal;
-        int m_cursor_x, m_cursor_y;
 };
 
 #endif

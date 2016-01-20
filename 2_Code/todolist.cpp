@@ -20,13 +20,40 @@ ToDoListEntry::ToDoListEntry(std::string todo_message):
     m_todo_message(todo_message)
 {
     m_done = false;
-    int message_length_in_chars = todo_message.length();
-    message_length = (message_length_in_chars % MAX_X == 0) ?
-    message_length_in_chars/((int) MAX_X) : 1 + message_length_in_chars/((int)
-    MAX_X);
     next_todo_entry = NULL;
     prev_todo_entry = NULL;
     cursor_y_position_from_top = 0;
+    update_message_block_length();
+}
+
+void ToDoListEntry::update_message_block_length()
+{
+    int message_length_in_chars = m_todo_message.length();
+    const int LINE_SIZE = (MAX_X - X_OFFSET);
+    message_block_length = (message_length_in_chars % LINE_SIZE == 0) ?
+    message_length_in_chars/LINE_SIZE : 1 + message_length_in_chars/LINE_SIZE;
+}
+
+void ToDoListEntry::print_multiline_message(WINDOW* win, int y_offset)
+{
+    size_t length = -1;
+    int original_y_offset = y_offset;
+    size_t print_block_start_point = 0;
+    size_t print_length_in_chars = (size_t) m_todo_message.length();
+    const int print_step_size = MAX_X - X_OFFSET;
+    char print_block[print_step_size+1];
+    while (print_length_in_chars > print_step_size)
+    {
+        length = m_todo_message.copy(print_block, print_step_size, print_block_start_point); 
+        print_block[length]='\0';
+        print_block_start_point += print_step_size;
+        print_length_in_chars -= print_step_size;
+        mvwprintw(win, y_offset++, X_OFFSET, "%s", print_block);
+    }
+    length = m_todo_message.copy(print_block, print_length_in_chars, print_block_start_point); 
+    print_block[length]='\0';
+    mvwprintw(win, y_offset, X_OFFSET, "%s", print_block);
+    wmove(win, original_y_offset, X_OFFSET);
 }
 
 void ToDoListEntry::print(WINDOW* win, int y_offset, bool highlight)
@@ -39,19 +66,25 @@ void ToDoListEntry::print(WINDOW* win, int y_offset, bool highlight)
     if(highlight)
     {
         wattron(win, A_STANDOUT);
-        mvwprintw(win, y_offset, X_OFFSET, "%s", m_todo_message.c_str());
+        print_multiline_message(win, y_offset);
         wattroff(win, A_STANDOUT);
     }
     else{
-        mvwprintw(win, y_offset, X_OFFSET, "%s", m_todo_message.c_str());
+        print_multiline_message(win, y_offset);
     }
-    wmove(win, y_offset, X_OFFSET);
 }
 
 void ToDoListEntry::clear(WINDOW* win, int y_offset)
 {
-    wmove(win, y_offset, X_OFFSET);
-    wclrtoeol(win);
+    int cursor_position = y_offset + message_block_length;
+    // The todo-messsage begins at y_offset and ends at y_offset +
+    // message_block_length-1. The condition used in the code below 
+    // seems appropriate
+    while(cursor_position > y_offset)
+    {
+        wmove(win, --cursor_position,  X_OFFSET);
+        wclrtoeol(win);
+    }
 }
 
 void ToDoListEntry::refresh(WINDOW* win, int y_offset, bool highlight)
@@ -60,14 +93,53 @@ void ToDoListEntry::refresh(WINDOW* win, int y_offset, bool highlight)
     print(win, y_offset,  highlight);
 }
 
-void ToDoListEntry::set_next_todo_entry(ToDoListEntry* entry)
+bool ToDoListEntry::check_end_point(bool up_as_true)
 {
-    next_todo_entry = entry;
+    if (up_as_true)
+    {
+        if (cursor_y_position_from_top == 0)
+        {
+            return true;
+        }
+        return false;
+    } 
+    else {
+        if (cursor_y_position_from_top == message_block_length-1){
+            return true;
+        }
+        return false;
+    }
 }
 
-void ToDoListEntry::set_prev_todo_entry(ToDoListEntry* entry)
+void ToDoListEntry::update_cursor_position(WINDOW* win, int& cursor_y, int&
+cursor_x, bool up_as_true)
 {
-    prev_todo_entry = entry;
+    if (up_as_true)
+    {
+        cursor_y_position_from_top--;
+        wmove(win, --cursor_y, cursor_x);
+    }
+    else {
+        cursor_y_position_from_top++;
+        cursor_x = (cursor_x <= x_limit()) ? cursor_x : x_limit();
+        wmove(win, ++cursor_y, cursor_x);
+    }
+}
+
+ToDoListEntry* ToDoListEntry::insert_new_entry_above()
+{
+    ToDoListEntry* inserted_entry = new ToDoListEntry;
+    inserted_entry->next_todo_entry = this;
+    this->prev_todo_entry = inserted_entry;
+    return inserted_entry;
+}
+
+ToDoListEntry* ToDoListEntry::insert_new_entry_below()
+{
+    ToDoListEntry* inserted_entry = new ToDoListEntry;
+    inserted_entry->prev_todo_entry = this;
+    this->next_todo_entry = inserted_entry;
+    return inserted_entry;
 }
 
 void ToDoListEntry::remove_from_list()
@@ -78,7 +150,7 @@ void ToDoListEntry::remove_from_list()
     
     if (prev_todo_entry != NULL)
     {
-        prev_todo_entry->set_next_todo_entry(next_todo_entry);
+        prev_todo_entry->next_todo_entry = this->next_todo_entry;
     }
     else {
         // This means that the entry we just deleted was the first entry in the
@@ -88,7 +160,7 @@ void ToDoListEntry::remove_from_list()
     }
     if (next_todo_entry != NULL)
     {
-        next_todo_entry->set_prev_todo_entry(prev_todo_entry);
+        next_todo_entry->prev_todo_entry = this->prev_todo_entry;
     }
     else {
         // This means that this entry was the last entry in the list. What
@@ -111,10 +183,10 @@ void ToDoListEntry::insert_text(WINDOW* win, int& cursor_y, int& cursor_x,
     // keys that are supported are BACKSPACE and DEL (also defined in the file
     // definitions.h
 
-    unsigned position_wrt_string = cursor_y_position_from_top*MAX_X + 
-    ((unsigned)cursor_x - X_OFFSET);
-    if ((input_key >= (char) FIRST_WRITABLE_ASCII_CHAR) && (input_key <= (char)
-LAST_WRITEABLE_ASCII_CHAR))
+    unsigned position_wrt_string = cursor_y_position_from_top*(MAX_X-X_OFFSET)
+    + ((unsigned)cursor_x - X_OFFSET);
+    if ((input_key >= (char) FIRST_WRITABLE_ASCII_CHAR) && 
+        (input_key <= (char) LAST_WRITEABLE_ASCII_CHAR))
     {
         // Usage: string.insert(<where_to_insert>, <how_many_characters>, <>);
         m_todo_message.insert(position_wrt_string, 1, input_key);
@@ -132,9 +204,24 @@ LAST_WRITEABLE_ASCII_CHAR))
     } 
     else if (input_key == (char) M_KEY_DELETE)
     {
-        m_todo_message.erase(m_todo_message.begin()+position_wrt_string-1);
-        refresh(win, cursor_y-cursor_y_position_from_top, false);
+        if (position_wrt_string<m_todo_message.length())
+        {
+            m_todo_message.erase(m_todo_message.begin()+position_wrt_string-1);
+            refresh(win, cursor_y-cursor_y_position_from_top, false);
+        }
     }
+    update_message_block_length();
+}
+
+int ToDoListEntry::x_limit()
+{
+    if (cursor_y_position_from_top == message_block_length-1)
+    {
+        int chars_in_a_line = (MAX_X - X_OFFSET);
+        int message_length_in_chars = m_todo_message.length();
+        return X_OFFSET-1 + (message_length_in_chars % chars_in_a_line);
+    }
+    else return MAX_X;
 }
 
 // Function definitions for ToDoList Class
@@ -182,18 +269,17 @@ void ToDoList::new_todo_entry(std::string todo_message)
     // new entry should have both next and prev entries set to null. It can only
     // be accessed as the top entry of the list
 
-    ToDoListEntry* new_entry = new ToDoListEntry(todo_message);
 
     if (last_todo_entry != NULL)
     {
         assert(first_todo_entry != NULL);   // Insure that the first entry
                                             // doesn't point to NULL if the 
                                             // last entry doesn't point to NULL
-        last_todo_entry->set_next_todo_entry(new_entry);
-        new_entry->set_prev_todo_entry(last_todo_entry);
+       ToDoListEntry* new_entry = last_todo_entry->insert_new_entry_below(); 
     }
     else {  
         assert(first_todo_entry == NULL);
+        ToDoListEntry* new_entry = new ToDoListEntry(todo_message);
         first_todo_entry = new_entry;
         last_todo_entry = new_entry; 
     }
@@ -203,10 +289,19 @@ void ToDoList::new_todo_entry(std::string todo_message)
     // last_todo_entry for the first_todo_entry is always NULL
 }
 
+ToDoListEntry* ToDoList::new_todo_entry(ToDoListEntry* entry)
+{
+    // By calling this function, one can insert a ToDo entry BEFORE the "entry"
+    // that has been passed as a function parameter
+    ToDoListEntry* inserted_entry = entry->insert_new_entry_above();
+    return inserted_entry;
+}
+
 // Function definitions for the sample ToDoList class
 
 SampleToDoList::SampleToDoList()
 {
-    new_todo_entry("Complete the ToDo Application");
-    new_todo_entry("Continue work on statistical mechanics");
+    //new_todo_entry("Complete the ToDo Application");
+    //new_todo_entry("Continue work on statistical mechanics");
+    new_todo_entry("This is a big todo list entry. It should span multiple lines and should let us check some of the multi-line functionality that we are trying to implement");
 }
