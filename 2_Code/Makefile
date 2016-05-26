@@ -46,3 +46,4 @@ pristine:
 
 clean:
 	rm -f *.o
+	rm -f todo-list
