@@ -22,6 +22,8 @@ class ToDoListEntry
 
         // Functions for setting up the pointers for next and previous elements
         // in a doubly linked list
+        ToDoListEntry* insert_new_entry_above(std::string todo_message);
+        ToDoListEntry* insert_new_entry_below(std::string todo_message);
         ToDoListEntry* insert_new_entry_above();
         ToDoListEntry* insert_new_entry_below();
         ToDoListEntry* get_prev_todo_entry(){ return prev_todo_entry; }
@@ -33,7 +35,7 @@ class ToDoListEntry
         void refresh(WINDOW* win, int y_offset, bool highlight);
         int get_message_block_length(){ return message_block_length; }
         void toggle_mark_unmark(){ m_done = !m_done; }
-        void insert_text(WINDOW* win, int& cursor_y, int& cursor_x, char input_key);
+        void insert_text(WINDOW* win, int cursor_y, int cursor_x, char input_key);
         int x_limit();  // Gives the max value that the cursor can
                                     // move to in the x direction, when on this
                                     // entry for each y coordinate
@@ -76,6 +78,8 @@ class ToDoList
         // functionality for adding and removing items from the ToDoList
         void new_todo_entry(std::string todo_message);
         ToDoListEntry* new_todo_entry(ToDoListEntry* entry);
+        ToDoListEntry* new_todo_entry(ToDoListEntry* entry, std::string
+        todo_message);
         bool remove_todo_entry(ToDoListEntry* list_entry);
         ToDoListEntry* get_list_top(){ return first_todo_entry; }
 

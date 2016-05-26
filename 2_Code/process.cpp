@@ -64,6 +64,21 @@ first_entry_to_print)
     wrefresh(win);
 }
 
+void ListPreviewManager::insert_text(char input)
+{
+    entry_under_cursor->insert_text(win, m_cursor_y, m_cursor_x, input);
+    if ((input >= (char) FIRST_WRITABLE_ASCII_CHAR) && 
+        (input <= (char) LAST_WRITEABLE_ASCII_CHAR))
+    {
+        move_cursor_right();
+    } 
+    else if (input == (char) M_KEY_BACKSPACE)
+    {
+        move_cursor_left();
+    } 
+    wrefresh(win);
+}
+
 void ListPreviewManager::process(char input)
 {
     switch (input)
@@ -72,9 +87,7 @@ void ListPreviewManager::process(char input)
             case INPUT:\
                 if (m_mode == NON_FUNC_MODE)\
                 {\
-                   entry_under_cursor->insert_text(win, m_cursor_y,\
-                     m_cursor_x, INPUT);\
-                    wrefresh(win);\
+                    insert_text(INPUT);\
                 } else {\
                     FUNCTION(); \
                 }  break;
@@ -83,9 +96,7 @@ void ListPreviewManager::process(char input)
         default:
             if (m_mode == INSERT)
             {
-                entry_under_cursor->insert_text(win, m_cursor_y, m_cursor_x, 
-                    input);
-                wrefresh(win);
+                insert_text(input);
             }
             else {
                 return;
@@ -97,7 +108,7 @@ void ListPreviewManager::process(char input)
 // Key stroke related functions have been described here
 
 void ListPreviewManager::move_cursor_left(){
-    if (m_mode == EDIT)
+    if (m_mode == EDIT || m_mode == INSERT)
     {
         if (m_cursor_x > X_OFFSET)
         {
@@ -120,7 +131,7 @@ void ListPreviewManager::move_cursor_left(){
 }
 
 void ListPreviewManager::move_cursor_right(){
-    if (m_mode == EDIT)
+    if (m_mode == EDIT || m_mode == INSERT)
     {
         if (m_cursor_x < entry_under_cursor->x_limit())
         {
@@ -154,7 +165,7 @@ void ListPreviewManager::move_cursor_up(){
             wrefresh(win);
         }
     }
-    else if (m_mode == EDIT)
+    else
     {
         bool jump_todo_entry = entry_under_cursor->check_end_point(true);
         if (jump_todo_entry)
@@ -162,9 +173,9 @@ void ListPreviewManager::move_cursor_up(){
             if(entry_under_cursor->get_prev_todo_entry() != NULL)
             {
                 entry_under_cursor = entry_under_cursor->get_prev_todo_entry();
-                m_cursor_y--;
                 entry_under_cursor->set_cursor_bottom();
-                wmove(win, m_cursor_y, m_cursor_x); 
+                m_cursor_x = entry_under_cursor->x_limit();
+                wmove(win, --m_cursor_y, m_cursor_x); 
             }
         }
         else {
@@ -187,7 +198,7 @@ void ListPreviewManager::move_cursor_down(){
             wrefresh(win);
         }
     }
-    else if (m_mode == EDIT)
+    else
     {
         bool jump_todo_entry = entry_under_cursor->check_end_point(false);
         if (jump_todo_entry)
@@ -195,9 +206,9 @@ void ListPreviewManager::move_cursor_down(){
             if(entry_under_cursor->get_prev_todo_entry() != NULL)
             {
                 entry_under_cursor = entry_under_cursor->get_next_todo_entry();
-                m_cursor_y++;
                 entry_under_cursor->set_cursor_top();
-                wmove(win, m_cursor_y, m_cursor_x);
+                m_cursor_x = X_OFFSET;
+                wmove(win, ++m_cursor_y, m_cursor_x);
             }
         }
         else {
@@ -259,6 +270,7 @@ void ListPreviewManager::step_modes_back(){
 
 void ListPreviewManager::add_todo_entry(){
     entry_under_cursor = td_list->new_todo_entry(entry_under_cursor);
+    print_todo_list_in_window(entry_under_cursor);
 }
 
 void ListPreviewManager::two_tap_delete(){

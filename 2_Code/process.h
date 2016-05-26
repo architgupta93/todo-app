@@ -56,6 +56,7 @@ class ListPreviewManager : public PreviewManager
         void two_tap_quit();
         void step_modes_back();
         void add_todo_entry();
+        void insert_text(char input);
 
     private:
         ToDoList* td_list;      // The todo list whose preview is being managed
