@@ -5,7 +5,7 @@
 #define FAILURE false
 #define X_OFFSET  4
 #define Y_OFFSET  2
-#define MAX_X  80
+#define WRITABLE_X 80
 #define FIRST_WRITABLE_ASCII_CHAR 32
 #define LAST_WRITEABLE_ASCII_CHAR 126
 #define M_KEY_BACKSPACE 8

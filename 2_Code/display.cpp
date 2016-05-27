@@ -69,20 +69,22 @@ WINDOW* DisplayHandler::setup_main_window()
 {
     // Usage: setup_main_window(height, width, start_y, start_x)
     // This creates a window with the given specifications
-    return setup_window(MAX_Y, MAX_X, 0, 0);
+    WINDOW* main_window = setup_window(MAX_Y, MAX_X, 0, 0);
+    box(main_window, 0, 0);
+    wrefresh(main_window);
+    return main_window;
 }
 
 WINDOW* DisplayHandler::setup_window(int height, int width, int starty, int startx)
 {
-    main_window = newwin(height, width, starty, startx);
-    box(main_window, 0, 0);
+    WINDOW* current_window = newwin(height, width, starty, startx);
 
     // The steps mentioned above only modify the internal data structures. In
     // order to actually modify what is hwon on the screen, we need to call the
     // refresh window function which updates the contents on the screen as well
 
-    wrefresh(main_window);
-    return main_window;
+    wrefresh(current_window);
+    return current_window;
 }
 
 void DisplayHandler::banner(std::string message)

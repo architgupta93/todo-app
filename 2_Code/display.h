@@ -19,6 +19,8 @@ class DisplayHandler
         void terminate();
         void banner(std::string message);
         void print_line_in_middle(std::string line, int y_level);
+        int get_MAX_X() {return MAX_X;}
+        int get_MAX_Y() {return MAX_Y;}
         WINDOW* setup_main_window();
         WINDOW* setup_window(int height, int width, int starty, int startx);
 

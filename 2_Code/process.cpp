@@ -122,7 +122,7 @@ void ListPreviewManager::move_cursor_left(){
             {
                 // Change the x cursor value only if the y cursor has changed
                 // (i.e. the line under cursor has been switched)
-                m_cursor_x = MAX_X;
+                m_cursor_x = WRITABLE_X;
                 wmove(win, m_cursor_y, m_cursor_x);
                 wrefresh(win);
             }

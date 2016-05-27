@@ -31,7 +31,7 @@ void ToDoListEntry::update_message_block_length()
     if (!m_todo_message.empty())
     {
         int message_length_in_chars = m_todo_message.length();
-        const int LINE_SIZE = (MAX_X - X_OFFSET);
+        const int LINE_SIZE = (WRITABLE_X - X_OFFSET);
         message_block_length = (message_length_in_chars % LINE_SIZE == 0) ?
         message_length_in_chars/LINE_SIZE : 1 + message_length_in_chars/LINE_SIZE;
     } else {
@@ -43,16 +43,16 @@ void ToDoListEntry::print_multiline_message(WINDOW* win, int y_offset)
 {
     size_t length = 0;  // Assume the default value of a string to be ""
     int original_y_offset = y_offset;
-    const int print_step_size = MAX_X - X_OFFSET;
+    const int print_step_size = WRITABLE_X - X_OFFSET;
     char print_block[print_step_size+1];
     size_t print_block_start_point = 0;
     size_t print_length_in_chars = (size_t) m_todo_message.length();
     while (print_length_in_chars > print_step_size)
     {
         length = m_todo_message.copy(print_block, print_step_size, print_block_start_point); 
-        // This step copies (MAX_X-OFFSET) characters into this array. Since the
+        // This step copies (WRITABLE_X-OFFSET) characters into this array. Since the
         // first character is printed at x=X_OFFSET. NOTHING IS PRINT AT X =
-        // MAX_X
+        // WRITABLE_X
         print_block[length]='\0';
         print_block_start_point += print_step_size;
         print_length_in_chars -= print_step_size;
@@ -205,7 +205,7 @@ void ToDoListEntry::insert_text(WINDOW* win, int cursor_y, int cursor_x,
     // keys that are supported are BACKSPACE and DEL (also defined in the file
     // definitions.h
 
-    unsigned position_wrt_string = cursor_y_position_from_top*(MAX_X-X_OFFSET)
+    unsigned position_wrt_string = cursor_y_position_from_top*(WRITABLE_X-X_OFFSET)
     + ((unsigned)cursor_x - X_OFFSET);
     if ((input_key >= (char) FIRST_WRITABLE_ASCII_CHAR) && 
         (input_key <= (char) LAST_WRITEABLE_ASCII_CHAR))
@@ -239,13 +239,13 @@ int ToDoListEntry::x_limit()
     {
         if (!m_todo_message.empty())
         {
-            int chars_in_a_line = (MAX_X - X_OFFSET);
+            int chars_in_a_line = (WRITABLE_X - X_OFFSET);
             int message_length_in_chars = m_todo_message.length();
             return X_OFFSET-1+(message_length_in_chars % chars_in_a_line);
         }
         return X_OFFSET;
     }
-    else return MAX_X;
+    else return WRITABLE_X;
 }
 
 // Function definitions for ToDoList Class
@@ -340,7 +340,7 @@ SampleToDoList::SampleToDoList()
     new_todo_entry("Complete the ToDo Application");
     new_todo_entry("Continue work on statistical mechanics");
     new_todo_entry("Complete the ToDo Application");
-    new_todo_entry("");
+    //new_todo_entry("");
     //new_todo_entry("");
     //new_todo_entry("");
     //new_todo_entry("");
