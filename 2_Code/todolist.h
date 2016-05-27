@@ -1,10 +1,11 @@
-// Base class implementing the "todo-List" in the application. This class is
-// responsible for handling the backend of a todo lists (functions like adding
-// an entry to the list, marking an entry as done or removing an entry from the
-// list)
-//                                                                             
-// Author: Archit Gupta                                                        
-// Date: Dec 23, 2015 
+/* Base class implementing the "todo-List" in the application. This class is
+responsible for handling the backend of a todo lists (functions like adding
+an entry to the list, marking an entry as done or removing an entry from the
+list)
+                                                                            
+Author: Archit Gupta                                                        
+Date: Dec 23, 2015 
+*/
 
 #ifndef __TODOLIST_H_INCLUDED__
 #define __TODOLIST_H_INCLUDED__
