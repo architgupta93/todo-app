@@ -246,7 +246,7 @@ int ToDoListEntry::x_limit()
         }
         return X_OFFSET;
     }
-    else return WRITABLE_X;
+    return WRITABLE_X;
 }
 
 // Function definitions for ToDoList Class

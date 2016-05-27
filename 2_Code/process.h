@@ -1,8 +1,9 @@
-// Header file for handling the system ls (keystrokes etc.) and exercising
-// different functions available from other classes/files
-//
-// Author: Archit Gupta, Nehal Bhandari
-// Date december 24, 2015
+/* Header file for handling the system ls (keystrokes etc.) and exercising
+ different functions available from other classes/files
+
+ Author: Archit Gupta, Nehal Bhandari
+ Date december 24, 2015
+*/
 
 #ifndef __PROCESS_H_INCLUDED__
 #define __PROCESS_H_INCLUDED__

@@ -12,6 +12,15 @@ Date: May 26, 2016
 #include <string>
 
 // ENUM desciption for defining the day of the week
+enum CalendarDay{
+    MON,
+    TUE,
+    WED,
+    THU,
+    FRI,
+    SAT,
+    SUN
+};
 
 // Calendar entry class description
 class CalendarEntry

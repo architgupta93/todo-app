@@ -245,7 +245,7 @@ void ListPreviewManager::switch_to_visual_mode(){
 
 void ListPreviewManager::switch_to_insert_mode(){
     m_mode = INSERT;
-    curs_set(m_mode);
+    curs_set(EDIT); // Using curs_set(INSERT) makes the cursor invisible -___-
     entry_under_cursor->refresh(win, m_cursor_y, false);
     wmove(win, m_cursor_y, m_cursor_x);
     wrefresh(win);
