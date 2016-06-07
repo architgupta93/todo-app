@@ -10,26 +10,27 @@
 
 #include <string>
 #include <ncurses.h>
+#include <vector>
 
 class DisplayHandler
 {
     public:
         DisplayHandler();
         void initialize();
+        void refresh();
         void terminate();
         void banner(std::string message);
         void print_line_in_middle(std::string line, int y_level);
         int get_MAX_X() {return MAX_X;}
         int get_MAX_Y() {return MAX_Y;}
-        WINDOW* setup_main_window();
+        WINDOW* setup_window();
         WINDOW* setup_window(int height, int width, int starty, int startx);
 
     private:
         static std::string banner_text;
         static int MAX_X, MAX_Y;    // Boundary values
         static int d_x, d_y;        // Current values
-        WINDOW* main_window;        // This is the main window that will
-                                    // display all the todo information
+        vector<WINDOW*> m_windows;  // A vector of all the windows that are currently being displayed
 };
 
 #endif

@@ -53,8 +53,17 @@ void DisplayHandler::initialize()
     refresh();  
 }
 
+void DisplayHandler::refresh()
+{
+    for (vector<WINDOW*>::iterator i=m_windows.begin(); i != m_window.end; i++)
+    {
+        wrefresh(*i);
+    }
+}
+
 void DisplayHandler::terminate()
 {
+    m_windows.clear();
     endwin();
 }
 
@@ -65,10 +74,10 @@ void DisplayHandler::print_line_in_middle(std::string line, int y_level)
     mvprintw(y_level, startx, "%s", line.c_str());
 }
 
-WINDOW* DisplayHandler::setup_main_window()
+WINDOW* DisplayHandler::setup_window()
 {
     // Usage: setup_main_window(height, width, start_y, start_x)
-    // This creates a window with the given specifications
+    // This creates a window with the given specifications. The actual function has been overloaded with this one when no arguments have been provided. It sets up a window that spans the parent.
     WINDOW* main_window = setup_window(MAX_Y, MAX_X, 0, 0);
     box(main_window, 0, 0);
     wrefresh(main_window);
@@ -84,6 +93,7 @@ WINDOW* DisplayHandler::setup_window(int height, int width, int starty, int star
     // refresh window function which updates the contents on the screen as well
 
     wrefresh(current_window);
+    m_windows.push_back(current_window);
     return current_window;
 }
 
