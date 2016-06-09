@@ -32,7 +32,7 @@ void DisplayHandler::initialize()
 
     // Verifying that the class has been initialized (and this function is 
     // being called exactly once. Otherwise, MAX_X and MAX_Y would have been
-    // set to the valuses from the screen
+    // set to the values from the screen
     
     getmaxyx(stdscr, MAX_Y, MAX_X);
     noecho();   // Stops getc() from printing text on the screen
@@ -55,7 +55,7 @@ void DisplayHandler::initialize()
 
 void DisplayHandler::refresh()
 {
-    for (vector<WINDOW*>::iterator i=m_windows.begin(); i != m_window.end; i++)
+    for (std::vector<WINDOW*>::iterator i=m_windows.begin(); i != m_windows.end(); i++)
     {
         wrefresh(*i);
     }

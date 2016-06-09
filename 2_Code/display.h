@@ -30,7 +30,7 @@ class DisplayHandler
         static std::string banner_text;
         static int MAX_X, MAX_Y;    // Boundary values
         static int d_x, d_y;        // Current values
-        vector<WINDOW*> m_windows;  // A vector of all the windows that are currently being displayed
+        std::vector<WINDOW*> m_windows;  // A vector of all the windows that are currently being displayed
 };
 
 #endif
