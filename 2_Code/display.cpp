@@ -36,7 +36,8 @@ void DisplayHandler::initialize()
     
     getmaxyx(stdscr, MAX_Y, MAX_X);
     noecho();   // Stops getc() from printing text on the screen
-    raw();      // The raw() function lets us read keyboard strokes before 
+    cbreak();   // Does the same thing as raw()
+    //raw();    // The raw() function lets us read keyboard strokes before 
                 // a line is completed (return is pressed) -- line buffering
     banner(banner_text);
     try{
@@ -78,7 +79,7 @@ WINDOW* DisplayHandler::setup_window()
 {
     // Usage: setup_main_window(height, width, start_y, start_x)
     // This creates a window with the given specifications. The actual function has been overloaded with this one when no arguments have been provided. It sets up a window that spans the parent.
-    WINDOW* main_window = setup_window(MAX_Y, MAX_X, 0, 0);
+    WINDOW *main_window = newwin(MAX_Y, MAX_X, 0, 0);
     box(main_window, 0, 0);
     wrefresh(main_window);
     return main_window;

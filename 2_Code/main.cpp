@@ -28,6 +28,7 @@ int main(int argc, char** argv)
     int MAX_X, MAX_Y;   // Getting bound values for the window
     MAX_X = m_display->get_MAX_X();
     MAX_Y = m_display->get_MAX_Y();
+    //WINDOW* boundingBox = m_display->setup_window(MAX_Y, MAX_X, 0, 0);
     WINDOW* boundingBox = m_display->setup_window();
     //ListPreviewManager lp(boundingBox, pTest);
     //WINDOW* baseList = m_display->setup_window(MAX_Y-2, MAX_X-2, 1, 1);
@@ -35,7 +36,7 @@ int main(int argc, char** argv)
     //lp.print_todo_list_in_window(pTest->get_list_top());
     //while(!lp.exit_signal())
     //    lp.process(getch());
-    getch();
+    wgetch(boundingBox);
     m_display->terminate();
     return 0;
 }
