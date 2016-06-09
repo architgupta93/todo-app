@@ -11,7 +11,8 @@ class StatusBar
     public:
         StatusBar();    // Constructor
         StatusBar(WINDOW* parentWindow); // Overloaded constructor for assigning a parent window to the status bar. This should be used!
-        bool print();
+        void clear();
+        bool print(char* print_message);
         bool refresh();
         void update_list(ToDoList* cList);
         void update_list_entry(ToDoListEntry* cListEntry);

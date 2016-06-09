@@ -21,14 +21,21 @@ StatusBar::StatusBar(WINDOW* parentWindow)
     currentListMode = VISUAL;
 }
 
-bool StatusBar::print()
+void StatusBar::clear()
 {
+    wclear(win);
+    refresh();
+}
 
+bool StatusBar::print(char* print_message)
+{
+    mvwprintw(win, Y_OFFSET, X_OFFSET, "%s", print_message); 
+    refresh();  // Print the message and update the window
 }
 
 bool StatusBar::refresh()
 {
-
+    wrefresh(win);  // Basic function that might be required
 }
 
 void StatusBar::update_list_entry(ToDoListEntry* cListEntry)
