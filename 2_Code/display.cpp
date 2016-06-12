@@ -86,8 +86,8 @@ void DisplayHandler::setup_status_bar()
 WINDOW* DisplayHandler::setup_window()
 {
     // Usage: setup_main_window(height, width, start_y, start_x)
-    // This creates a window with the given specifications. The actual function has been overloaded with this one when no arguments have been provided. It sets up a window that spans the parent.
-    WINDOW *main_window = setup_window_with_frame(MAX_Y, MAX_X, 0, 0);
+    // Current design: The bounding box DOES not have a bounday. Each todo list will have its own bounding box
+    WINDOW *main_window = setup_window(MAX_Y, MAX_X, 0, 0);
 }
 
 WINDOW* DisplayHandler::setup_window_with_frame(int height, int width, int starty, int startx)

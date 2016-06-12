@@ -11,7 +11,7 @@ enum PreviewMode{
 #define FAILURE false
 #define X_OFFSET  4
 #define Y_OFFSET  2
-#define STATUS_BAR_HEIGHT 20
+#define STATUS_BAR_HEIGHT 10
 #define WRITABLE_X 80
 #define FIRST_WRITABLE_ASCII_CHAR 32
 #define LAST_WRITEABLE_ASCII_CHAR 126
