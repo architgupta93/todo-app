@@ -4,6 +4,7 @@
 // Author: Archit Gupta
 // Date: December 24, 2015
 
+#include "definitions.h"
 #include "display.h"
 #include "user.h"
 #include "todolist.h"
@@ -28,9 +29,9 @@ int main(int argc, char** argv)
     int MAX_X, MAX_Y;   // Getting bound values for the window
     MAX_X = m_display->get_MAX_X();
     MAX_Y = m_display->get_MAX_Y();
-    m_display->setup_status_bar();
     WINDOW* boundingBox = m_display->setup_window();
-    WINDOW* baseList = m_display->setup_window(MAX_Y-2, MAX_X-2, 1, 1);
+    m_display->setup_status_bar();
+    WINDOW* baseList = m_display->setup_window(MAX_Y-2-STATUS_BAR_HEIGHT, MAX_X-2, 1, 1);
     ListPreviewManager lp(baseList, pTest);
     lp.print_todo_list_in_window(pTest->get_list_top());
     while(!lp.exit_signal())
