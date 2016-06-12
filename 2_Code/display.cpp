@@ -79,7 +79,7 @@ void DisplayHandler::print_line_in_middle(std::string line, int y_level)
 void DisplayHandler::setup_status_bar()
 {
     // Setting up status bar at a fixed location on the screen. The main windows will have to be resized accordingly
-    WINDOW* m_status_bar_win = setup_window_with_frame(STATUS_BAR_HEIGHT, MAX_X, MAX_Y-STATUS_BAR_HEIGHT, 0);
+    WINDOW* m_status_bar_win = setup_window_with_frame(STATUS_BAR_HEIGHT, MAX_X-2, MAX_Y-STATUS_BAR_HEIGHT, 1);
     m_status_bar = new StatusBar(m_status_bar_win);
 }
 
