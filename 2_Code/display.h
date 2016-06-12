@@ -8,6 +8,7 @@
 #ifndef __DISPLAY_H_INCLUDED__
 #define __DISPLAY_H_INCLUDED__
 
+#include "status-bar.h"
 #include <string>
 #include <ncurses.h>
 #include <vector>
@@ -20,13 +21,16 @@ class DisplayHandler
         void refresh();
         void terminate();
         void banner(std::string message);
+        void setup_status_bar();
         void print_line_in_middle(std::string line, int y_level);
         int get_MAX_X() {return MAX_X;}
         int get_MAX_Y() {return MAX_Y;}
         WINDOW* setup_window();
         WINDOW* setup_window(int height, int width, int starty, int startx);
+        WINDOW* setup_window_with_frame(int height, int width, int starty, int startx);
 
     private:
+        StatusBar* m_status_bar;
         static std::string banner_text;
         static int MAX_X, MAX_Y;    // Boundary values
         static int d_x, d_y;        // Current values

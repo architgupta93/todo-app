@@ -14,12 +14,6 @@
 #include "definitions.h"
 #include <ncurses.h>
 
-enum PreviewMode{
-    VISUAL,
-    EDIT,
-    INSERT
-};
-
 char valid_keystroke(DisplayHandler* display, char input);
 
 class PreviewManager

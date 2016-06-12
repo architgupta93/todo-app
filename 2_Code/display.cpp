@@ -3,6 +3,7 @@
 // Author: Archit Gupta
 // Date: December 24, 2015
 
+#include "definitions.h"
 #include "display.h"
 #include "assert.h"
 #include <ncurses.h>
@@ -22,7 +23,7 @@ std::string DisplayHandler::banner_text = "Welcome to the ToDo Application!\nPre
 
 DisplayHandler::DisplayHandler()
 {
-
+    m_status_bar = NULL;
 }
 
 void DisplayHandler::initialize()
@@ -75,14 +76,26 @@ void DisplayHandler::print_line_in_middle(std::string line, int y_level)
     mvprintw(y_level, startx, "%s", line.c_str());
 }
 
+void DisplayHandler::setup_status_bar()
+{
+    // Setting up status bar at a fixed location on the screen. The main windows will have to be resized accordingly
+    WINDOW* m_status_bar_win = setup_window_with_frame(STATUS_BAR_HEIGHT, MAX_X, MAX_Y-STATUS_BAR_HEIGHT, 0);
+    m_status_bar = new StatusBar(m_status_bar_win);
+}
+
 WINDOW* DisplayHandler::setup_window()
 {
     // Usage: setup_main_window(height, width, start_y, start_x)
     // This creates a window with the given specifications. The actual function has been overloaded with this one when no arguments have been provided. It sets up a window that spans the parent.
-    WINDOW *main_window = newwin(MAX_Y, MAX_X, 0, 0);
-    box(main_window, 0, 0);
-    wrefresh(main_window);
-    return main_window;
+    WINDOW *main_window = setup_window_with_frame(MAX_Y, MAX_X, 0, 0);
+}
+
+WINDOW* DisplayHandler::setup_window_with_frame(int height, int width, int starty, int startx)
+{
+    WINDOW* current_window = setup_window(height, width, starty, startx);
+    box(current_window, 0, 0);  // 0, 0 gives the default boundary |_| (head as well, which as not been printed here in the comment)
+    wrefresh(current_window);
+    return current_window;
 }
 
 WINDOW* DisplayHandler::setup_window(int height, int width, int starty, int startx)

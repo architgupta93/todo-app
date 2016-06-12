@@ -4,16 +4,21 @@ Author: Archit Gupta
 Date: May 26, 2016
 */
 
-#include "process.h"
+#ifndef __STATUS_BAR_H_INCLUDED__
+#define __STATUS_BAR_H_INCLUDED__
+
+#include "todolist.h"
+#include "definitions.h"
 
 class StatusBar
 {
     public:
         StatusBar();    // Constructor
-        StatusBar(WINDOW* parentWindow); // Overloaded constructor for assigning a parent window to the status bar. This should be used!
+        StatusBar(WINDOW* _win); // Overloaded constructor for assigning a parent window to the status bar. This should be used!
         void clear();
-        bool print(char* print_message);
-        bool refresh();
+        void initialize();
+        void print(std::string& print_message);
+        void refresh();
         void update_list(ToDoList* cList);
         void update_list_entry(ToDoListEntry* cListEntry);
         void set_mode(PreviewMode mode);
@@ -24,3 +29,5 @@ class StatusBar
         ToDoListEntry* currentListEntry;
         ToDoList* currentList;
 };
+
+#endif

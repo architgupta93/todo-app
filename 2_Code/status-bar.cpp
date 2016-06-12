@@ -15,10 +15,18 @@ StatusBar::StatusBar()
     currentListMode = VISUAL;
 }
 
-StatusBar::StatusBar(WINDOW* parentWindow)
+StatusBar::StatusBar(WINDOW* _win)
 {
-    win = parentWindow;
+    win = _win;
     currentListMode = VISUAL;
+    initialize();
+}
+
+void StatusBar::initialize()
+{
+    std::string statusBarBanner = "Welcome! This is the status bar\n";
+    print(statusBarBanner);
+    return;
 }
 
 void StatusBar::clear()
@@ -27,13 +35,13 @@ void StatusBar::clear()
     refresh();
 }
 
-bool StatusBar::print(char* print_message)
+void StatusBar::print(std::string& print_message)
 {
-    mvwprintw(win, Y_OFFSET, X_OFFSET, "%s", print_message); 
+    mvwprintw(win, Y_OFFSET, X_OFFSET, "%s", print_message.c_str()); 
     refresh();  // Print the message and update the window
 }
 
-bool StatusBar::refresh()
+void StatusBar::refresh()
 {
     wrefresh(win);  // Basic function that might be required
 }
