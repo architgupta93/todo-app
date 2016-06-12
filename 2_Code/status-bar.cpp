@@ -24,7 +24,7 @@ StatusBar::StatusBar(WINDOW* _win)
 
 void StatusBar::initialize()
 {
-    std::string statusBarBanner = "Welcome! This is the status bar\n";
+    std::string statusBarBanner = "Welcome! This is the status bar.";
     print(statusBarBanner);
     return;
 }
@@ -38,6 +38,7 @@ void StatusBar::clear()
 void StatusBar::print(std::string& print_message)
 {
     mvwprintw(win, Y_OFFSET, X_OFFSET, "%s", print_message.c_str()); 
+    wmove(win, Y_OFFSET, X_OFFSET);
     refresh();  // Print the message and update the window
 }
 
