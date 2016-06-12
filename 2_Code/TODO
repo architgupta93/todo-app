@@ -1,5 +1,5 @@
 BUGS FOUND:
-	1. The boundary of the window gets erased in parts when scrolling through todo entries. FIX: UNKNOWN!
+	1. The boundary of the window gets erased in parts when scrolling through todo entries. This happens because mvprintw erases the conents of the line **INSIDE** a window. This is problematic if the same window houses the bounding box, as well as the ToDo list content,  as rewriting the content erases the boundary.
 
 	2. NAVIGATION ISSUES: First, fix all the different modes -- Visual/Insert/Edit. Noted errors:
 		a. In the EDIT mode: Response on pressing 'l' is not consistent. On the first entry, nothing happens if you have reached the end. On the other entries, pressing 'l' at the end of the line proceeds to the next entry. On the last entry, this cause a segmentation fault.
