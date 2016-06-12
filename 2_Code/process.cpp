@@ -61,6 +61,7 @@ first_entry_to_print)
         first_entry_to_print = first_entry_to_print->get_next_todo_entry();
     }
     m_cursor_y = initial_y_cursor;
+    box(win, 0, 0);
     wrefresh(win);
 }
 

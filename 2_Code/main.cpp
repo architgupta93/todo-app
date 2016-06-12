@@ -31,7 +31,8 @@ int main(int argc, char** argv)
     MAX_Y = m_display->get_MAX_Y();
     WINDOW* boundingBox = m_display->setup_window();
     m_display->setup_status_bar();
-    WINDOW* baseList = m_display->setup_window(MAX_Y-2-STATUS_BAR_HEIGHT, MAX_X-2, 1, 1);
+    // WINDOW* baseList = m_display->setup_window(MAX_Y-2-STATUS_BAR_HEIGHT, MAX_X-2, 1, 1);
+    WINDOW* baseList = m_display->setup_window(MAX_Y-2-STATUS_BAR_HEIGHT, WRITABLE_X+2, 1, 1);
     // In the current scheme, the ToDo list class does not have a bounding window. Adding that in the next installment
     ListPreviewManager lp(baseList, pTest);
     lp.print_todo_list_in_window(pTest->get_list_top());
