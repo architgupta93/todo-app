@@ -342,8 +342,5 @@ SampleToDoList::SampleToDoList()
     new_todo_entry("Continue work on statistical mechanics");
     new_todo_entry("Complete the ToDo Application");
     //new_todo_entry("");
-    //new_todo_entry("");
-    //new_todo_entry("");
-    //new_todo_entry("");
     //new_todo_entry("This is a big todo list entry. It should span multiple lines and should let us check some of the multi-line functionality that we are trying to implement");
 }
