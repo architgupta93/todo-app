@@ -9,6 +9,8 @@ CC	= g++
 LIBFLAGS = -lncurses
 LDFLAGS += $(LIBFLAGS)
 
+DEBUG_FLAGS = -D__DEBUG__
+
 # Library flags required for compilation. In this
 # case, the ncurses library is required
 
@@ -28,11 +30,14 @@ OBJS = $(patsubst %.cpp, %.o, $(C_SRCS))
 # that we had previously generated. We can now say that the final executable
 # depends on $(OBJS) variable
 
+#debug: $(OBJS)
+#	$(CC) $(CCFLAGS) $(LDFLAGS) $(DEBUG_FLAGS) -o $@ $+
+
 todo-list: $(OBJS)
 	$(CC) $(CCFLAGS) $(LDFLAGS) -o $@ $+
 
 %.o:%.cpp
-	$(CC) $(CCFLAGS) -c -o $@ $<
+	$(CC) $(CCFLAGS) $(DEBUG_FLAGS) -c -o $@ $<
 
 comments:
 									# The -c option prevents the linker from

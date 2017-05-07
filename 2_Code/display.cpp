@@ -3,6 +3,7 @@
 // Author: Archit Gupta
 // Date: December 24, 2015
 
+#include "definitions.h"
 #include "display.h"
 #include "assert.h"
 #include <ncurses.h>
@@ -22,7 +23,7 @@ std::string DisplayHandler::banner_text = "Welcome to the ToDo Application!\nPre
 
 DisplayHandler::DisplayHandler()
 {
-
+    m_status_bar = NULL;
 }
 
 void DisplayHandler::initialize()
@@ -68,24 +69,36 @@ void DisplayHandler::terminate()
     endwin();
 }
 
-void DisplayHandler::print_line_in_middle(std::string line, int y_level)
+void DisplayHandler::printLineInMiddle(std::string line, int y_level)
 {   
     int string_length = line.length();
     int startx = (MAX_X-string_length)/2;
     mvprintw(y_level, startx, "%s", line.c_str());
 }
 
-WINDOW* DisplayHandler::setup_window()
+void DisplayHandler::setupStatusBar()
 {
-    // Usage: setup_main_window(height, width, start_y, start_x)
-    // This creates a window with the given specifications. The actual function has been overloaded with this one when no arguments have been provided. It sets up a window that spans the parent.
-    WINDOW *main_window = newwin(MAX_Y, MAX_X, 0, 0);
-    box(main_window, 0, 0);
-    wrefresh(main_window);
-    return main_window;
+    // Setting up status bar at a fixed location on the screen. The main windows will have to be resized accordingly
+    WINDOW* m_status_bar_win = setupWindowWithFrame(STATUS_BAR_HEIGHT, MAX_X-2, MAX_Y-STATUS_BAR_HEIGHT, 1);
+    m_status_bar = new StatusBar(m_status_bar_win);
 }
 
-WINDOW* DisplayHandler::setup_window(int height, int width, int starty, int startx)
+WINDOW* DisplayHandler::setupWindow()
+{
+    // Usage: setup_main_window(height, width, start_y, start_x)
+    // Current design: The bounding box DOES not have a bounday. Each todo list will have its own bounding box
+    WINDOW *main_window = setupWindow(MAX_Y, MAX_X, 0, 0);
+}
+
+WINDOW* DisplayHandler::setupWindowWithFrame(int height, int width, int starty, int startx)
+{
+    WINDOW* current_window = setupWindow(height, width, starty, startx);
+    box(current_window, 0, 0);  // 0, 0 gives the default boundary |_| (head as well, which as not been printed here in the comment)
+    wrefresh(current_window);
+    return current_window;
+}
+
+WINDOW* DisplayHandler::setupWindow(int height, int width, int starty, int startx)
 {
     WINDOW* current_window = newwin(height, width, starty, startx);
 
@@ -122,7 +135,7 @@ void DisplayHandler::banner(std::string message)
     }
 
     // mvprintw(0,3,"Printing %d lines in total", line_count);
-    // print_line_in_middle("Printing 2 lines in total", 0);
+    // printLineInMiddle("Printing 2 lines in total", 0);
 
     int y_level = (MAX_Y - line_count)/2;
     string_buffer.clear();
@@ -135,7 +148,7 @@ void DisplayHandler::banner(std::string message)
     string_buffer.str(message);
     while(getline(string_buffer, line))
     {
-        print_line_in_middle(line, y_level++);
+        printLineInMiddle(line, y_level++);
     }
 
 }

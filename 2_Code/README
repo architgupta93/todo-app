@@ -1,13 +1,23 @@
 Here is a comprehensive description of what each file in this software handles. For every CPP file, there is usually an H file that handles the basic class definitions. If you are maintaining or writing this software, please keep updating this README as changes are made to the file structure of contents.
 
-1. main.cpp - This file has the int main() function that is actually run when the app is launched. It instantiates a single class. We can probably remove this file later on and export the contents as a .so library.
+1. main.cpp - This file has the int main() function that is actually run when the app is launched.
+	It instantiates a single class.
+	[TODO: We can probably remove this file later on and export the contents as a .so library.]
 
-2. display.h/display.cpp - These files handle the DisplayHandler class. This class will be responsible to managing curses "windows" on the main display. It will therefore initialize, refresh, add and delete windows. The functionality for adding and deleting windows will be required when several ToDo lists have to be handles simultaneously.
+2. display.h/display.cpp - These files handle the DisplayHandler class.
+	This class will be responsible to managing curses "windows" on the main display.
+	It will therefore initialize, refresh, add and delete windows.
+	The functionality for adding and deleting windows will be required when several ToDo lists have to be handles simultaneously.
 
-3. process.h/process.cpp - These files act as interrupt handlers. Keystroke functions (maintating cursor position as h/j/k/l keys are pressed etc. is handled here) and some other miscellaneous function described here.
+3. process.h/process.cpp - These files act as interrupt handlers.
+	Keystroke functions (maintating cursor position as h/j/k/l keys are pressed etc. is handled here) and some other miscellaneous function described here.
+	Also, on thing that is currently here but seems somewhat misplaced is that the classes ListPreviewManager and PreviewManager are currently here.
+	These classes are responsible for printing ToDo lists inside a given window.
+	[TODO: Maybe in the future, these should be moved to display.h]
 
 4. keystrokes.def - Feed into a case statement to decide which function will be called when a particular key is pressed.
 
-5. todolist.h/todolist.cpp - Class/function definitions for a doubly-linked list based todo-list. Functions like adding a todo-list entry, removing an entry etc. are described here.
+5. todolist.h/todolist.cpp - Class/function definitions for a doubly-linked list based todo-list.
+	Functions like adding a todo-list entry, removing an entry etc. are described here.
 
 6. status-bar.h/status-bar.cpp - A special class that is used to describe the status bar at the bottom of the application screen.

@@ -14,12 +14,6 @@
 #include "definitions.h"
 #include <ncurses.h>
 
-enum PreviewMode{
-    VISUAL,
-    EDIT,
-    INSERT
-};
-
 char valid_keystroke(DisplayHandler* display, char input);
 
 class PreviewManager
@@ -28,7 +22,7 @@ class PreviewManager
         PreviewManager();
         bool exit_signal() { return m_exit_signal; }
 
-    protected:      // Can be accessed by functions of child classes
+    protected:
         WINDOW* win;            // Window in which this list class will be displayed
         PreviewMode m_mode;
         bool m_exit_signal;
@@ -41,7 +35,7 @@ class ListPreviewManager : public PreviewManager
     public:
         ListPreviewManager();
         ListPreviewManager(WINDOW* _win, ToDoList* td);
-        void print_todo_list_in_window(ToDoListEntry* first_entry_to_print);
+        void printToDoList(ToDoListEntry* first_entry_to_print);
         void process(char input);
 
     protected:
@@ -63,6 +57,7 @@ class ListPreviewManager : public PreviewManager
         ToDoList* td_list;      // The todo list whose preview is being managed
                                 // by this manager
         ToDoListEntry* entry_under_cursor;
+        void printToDoEntry(ToDoListEntry* entry_to_print, int y_cursor);
 };
 
 #endif
