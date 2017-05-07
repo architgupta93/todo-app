@@ -61,7 +61,7 @@ void ToDoListEntry::print_multiline_message(WINDOW* win, int y_offset)
     }
     length = m_todo_message.copy(print_block, print_length_in_chars, 
     print_block_start_point); 
-    print_block[length]='\0';
+    //print_block[length]='\0';
     mvwprintw(win, y_offset, X_OFFSET, "%s", print_block);
     wmove(win, original_y_offset, X_OFFSET);
 }
