@@ -47,8 +47,8 @@ ListPreviewManager::ListPreviewManager(WINDOW *_win, ToDoList *td)
     m_cursor_x = X_OFFSET;
 }
 
-void ListPreviewManager::print_todo_list_in_window(ToDoListEntry*
-first_entry_to_print)
+void ListPreviewManager::printToDoList(ToDoListEntry*
+    first_entry_to_print)
 {
     int initial_y_cursor = m_cursor_y;
     // TODO: Add functionality to print the todo-list title here (and have a
@@ -63,6 +63,12 @@ first_entry_to_print)
     m_cursor_y = initial_y_cursor;
     box(win, 0, 0);
     wrefresh(win);
+}
+
+void ListPreviewManager::printToDoEntry(ToDoListEntry*
+    entry_to_print)
+{
+
 }
 
 void ListPreviewManager::insert_text(char input)
@@ -271,7 +277,7 @@ void ListPreviewManager::step_modes_back(){
 
 void ListPreviewManager::add_todo_entry(){
     entry_under_cursor = td_list->new_todo_entry(entry_under_cursor);
-    print_todo_list_in_window(entry_under_cursor);
+    printToDoList(entry_under_cursor);
 }
 
 void ListPreviewManager::two_tap_delete(){
@@ -282,7 +288,7 @@ void ListPreviewManager::two_tap_delete(){
             entry_under_cursor->get_next_todo_entry();
         td_list->remove_todo_entry(entry_under_cursor);
         entry_under_cursor = next_todo_entry;
-        print_todo_list_in_window(entry_under_cursor);
+        printToDoList(entry_under_cursor);
     }
 }
 

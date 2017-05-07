@@ -69,36 +69,36 @@ void DisplayHandler::terminate()
     endwin();
 }
 
-void DisplayHandler::print_line_in_middle(std::string line, int y_level)
+void DisplayHandler::printLineInMiddle(std::string line, int y_level)
 {   
     int string_length = line.length();
     int startx = (MAX_X-string_length)/2;
     mvprintw(y_level, startx, "%s", line.c_str());
 }
 
-void DisplayHandler::setup_status_bar()
+void DisplayHandler::setupStatusBar()
 {
     // Setting up status bar at a fixed location on the screen. The main windows will have to be resized accordingly
-    WINDOW* m_status_bar_win = setup_window_with_frame(STATUS_BAR_HEIGHT, MAX_X-2, MAX_Y-STATUS_BAR_HEIGHT, 1);
+    WINDOW* m_status_bar_win = setupWindowWithFrame(STATUS_BAR_HEIGHT, MAX_X-2, MAX_Y-STATUS_BAR_HEIGHT, 1);
     m_status_bar = new StatusBar(m_status_bar_win);
 }
 
-WINDOW* DisplayHandler::setup_window()
+WINDOW* DisplayHandler::setupWindow()
 {
     // Usage: setup_main_window(height, width, start_y, start_x)
     // Current design: The bounding box DOES not have a bounday. Each todo list will have its own bounding box
-    WINDOW *main_window = setup_window(MAX_Y, MAX_X, 0, 0);
+    WINDOW *main_window = setupWindow(MAX_Y, MAX_X, 0, 0);
 }
 
-WINDOW* DisplayHandler::setup_window_with_frame(int height, int width, int starty, int startx)
+WINDOW* DisplayHandler::setupWindowWithFrame(int height, int width, int starty, int startx)
 {
-    WINDOW* current_window = setup_window(height, width, starty, startx);
+    WINDOW* current_window = setupWindow(height, width, starty, startx);
     box(current_window, 0, 0);  // 0, 0 gives the default boundary |_| (head as well, which as not been printed here in the comment)
     wrefresh(current_window);
     return current_window;
 }
 
-WINDOW* DisplayHandler::setup_window(int height, int width, int starty, int startx)
+WINDOW* DisplayHandler::setupWindow(int height, int width, int starty, int startx)
 {
     WINDOW* current_window = newwin(height, width, starty, startx);
 
@@ -135,7 +135,7 @@ void DisplayHandler::banner(std::string message)
     }
 
     // mvprintw(0,3,"Printing %d lines in total", line_count);
-    // print_line_in_middle("Printing 2 lines in total", 0);
+    // printLineInMiddle("Printing 2 lines in total", 0);
 
     int y_level = (MAX_Y - line_count)/2;
     string_buffer.clear();
@@ -148,7 +148,7 @@ void DisplayHandler::banner(std::string message)
     string_buffer.str(message);
     while(getline(string_buffer, line))
     {
-        print_line_in_middle(line, y_level++);
+        printLineInMiddle(line, y_level++);
     }
 
 }

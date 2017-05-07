@@ -27,15 +27,15 @@ int main(int argc, char** argv)
     // are not ingerited by a subclass by default
 
     int MAX_X, MAX_Y;   // Getting bound values for the window
-    MAX_X = m_display->get_MAX_X();
-    MAX_Y = m_display->get_MAX_Y();
-    WINDOW* boundingBox = m_display->setup_window();
-    m_display->setup_status_bar();
+    MAX_X = m_display->getMAXX();
+    MAX_Y = m_display->getMAXY();
+    WINDOW* boundingBox = m_display->setupWindow();
+    m_display->setupStatusBar();
     // WINDOW* baseList = m_display->setup_window(MAX_Y-2-STATUS_BAR_HEIGHT, MAX_X-2, 1, 1);
-    WINDOW* baseList = m_display->setup_window(MAX_Y-2-STATUS_BAR_HEIGHT, WRITABLE_X+2, 1, 1);
+    WINDOW* baseList = m_display->setupWindow(MAX_Y-2-STATUS_BAR_HEIGHT, WRITABLE_X+2, 1, 1);
     // In the current scheme, the ToDo list class does not have a bounding window. Adding that in the next installment
     ListPreviewManager lp(baseList, pTest);
-    lp.print_todo_list_in_window(pTest->get_list_top());
+    lp.printToDoList(pTest->get_list_top());
     while(!lp.exit_signal())
         lp.process(wgetch(baseList));
     m_display->terminate();
