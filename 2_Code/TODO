@@ -1,9 +1,11 @@
 BUGS FOUND:
 	1. The boundary of the window gets erased in parts when scrolling
-through todo entries. FIX: Let us put in two curses windows. One which is just a
-bounding box, and the other which has all the content ((STATUS: I think that the
-two curses windows idea has been implemented but it hasn't helped much, the
-boundary still vanishes))
+through todo entries.
+	-- FIX: Navigating through todo entries involves refreshing the current
+entry to remove the highlight and then refresh the next entry to add highlight
+to it. This is done by clearing and entry and repriting it with the appropriate
+attribute. If we use a wrefresh between "clear" and "print", the problem is
+resolved. DON'T KNOW WHY THOUGH!
 
 	2. NAVIGATION ISSUES: First, fix all the different modes -- Visual/Insert/Edit. Noted errors:
 		a. In the EDIT mode: Response on pressing 'l' is not consistent. On the first entry, nothing happens if you have reached the end. On the other entries, pressing 'l' at the end of the line proceeds to the next entry. On the last entry, this cause a segmentation fault.

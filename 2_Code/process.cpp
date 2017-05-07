@@ -50,25 +50,30 @@ ListPreviewManager::ListPreviewManager(WINDOW *_win, ToDoList *td)
 void ListPreviewManager::printToDoList(ToDoListEntry*
     first_entry_to_print)
 {
-    int initial_y_cursor = m_cursor_y;
+    int y_cursor = m_cursor_y;
     // TODO: Add functionality to print the todo-list title here (and have a
     // title for the todo list in the first place
-    while(first_entry_to_print != NULL)
+    ToDoListEntry* entry_to_print = first_entry_to_print;
+    while(entry_to_print != NULL)
     {
-        first_entry_to_print->print(win, m_cursor_y,
-            first_entry_to_print == entry_under_cursor);
-        m_cursor_y += first_entry_to_print->get_message_block_length();
-        first_entry_to_print = first_entry_to_print->get_next_todo_entry();
+        printToDoEntry(entry_to_print, y_cursor);
+        y_cursor += entry_to_print->get_message_block_length();
+        entry_to_print = entry_to_print->get_next_todo_entry();
     }
-    m_cursor_y = initial_y_cursor;
     box(win, 0, 0);
     wrefresh(win);
 }
 
 void ListPreviewManager::printToDoEntry(ToDoListEntry*
-    entry_to_print)
+    entry_to_print, int y_cursor)
 {
-
+    entry_to_print->print(win, y_cursor,
+        entry_to_print == entry_under_cursor);
+    #ifdef __DEBUG__
+        //getch();
+        //box(win, 0, 0);
+        wrefresh(win);
+    #endif
 }
 
 void ListPreviewManager::insert_text(char input)
@@ -170,6 +175,7 @@ void ListPreviewManager::move_cursor_up(){
             m_cursor_y -= entry_under_cursor->get_message_block_length();
             entry_under_cursor->refresh(win, m_cursor_y, true);
             wrefresh(win);
+            box(win, 0, 0);
         }
     }
     else
@@ -203,6 +209,7 @@ void ListPreviewManager::move_cursor_down(){
             entry_under_cursor = entry_under_cursor->get_next_todo_entry();
             entry_under_cursor->refresh(win, m_cursor_y, true);
             wrefresh(win);
+            box(win, 0, 0);
         }
     }
     else

@@ -100,6 +100,7 @@ void ToDoListEntry::clear(WINDOW* win, int y_offset)
 void ToDoListEntry::refresh(WINDOW* win, int y_offset, bool highlight)
 {
     clear(win, y_offset);
+    wrefresh(win);
     print(win, y_offset,  highlight);
 }
 

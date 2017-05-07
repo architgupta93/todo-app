@@ -57,7 +57,7 @@ class ListPreviewManager : public PreviewManager
         ToDoList* td_list;      // The todo list whose preview is being managed
                                 // by this manager
         ToDoListEntry* entry_under_cursor;
-        void printToDoEntry(ToDoListEntry* entry_to_print);
+        void printToDoEntry(ToDoListEntry* entry_to_print, int y_cursor);
 };
 
 #endif
