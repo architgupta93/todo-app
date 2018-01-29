@@ -1,0 +1,9 @@
+# VIM related
+*.swp
+
+# CPP files
+*.a
+*.o
+
+# Executable
+todo-list
