@@ -1,5 +1,13 @@
 BUGS FOUND:
-	1. The boundary of the window gets erased in parts when scrolling through todo entries. FIX: Let us put in two curses windows. One which is just a bounding box, and the other which has all the content ((STATUS: FIXED)
+	1. The boundary of the window gets erased in parts when scrolling
+through todo entries.
+	-- FIX: Navigating through todo entries involves refreshing the current
+entry to remove the highlight and then refresh the next entry to add highlight
+to it. This is done by clearing and entry and repriting it with the appropriate
+attribute. If we use a wrefresh between "clear" and "print", the problem is
+resolved.
+		-- REASON: "clear" calls a function wclrtoeol, which I think,
+also clears the "box" boundary which has to be redrawn then.
 
 	2. NAVIGATION ISSUES: First, fix all the different modes -- Visual/Insert/Edit. Noted errors:
 		a. In the EDIT mode: Response on pressing 'l' is not consistent. On the first entry, nothing happens if you have reached the end. On the other entries, pressing 'l' at the end of the line proceeds to the next entry. On the last entry, this cause a segmentation fault.
@@ -9,3 +17,5 @@ BUGS FOUND:
 
 TO BE ADDED SOMETIME:
 	1. User accounts and multiple ToDo lists. A single ToDo list is not the ultimate goal of this application. Several features should be added, like support for multiple todo-lists (daily/weekly/monthly).
+
+COMPLETED:
