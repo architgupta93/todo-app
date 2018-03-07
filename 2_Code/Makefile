@@ -34,7 +34,7 @@ OBJS = $(patsubst %.cpp, %.o, $(C_SRCS))
 #	$(CC) $(CCFLAGS) $(LDFLAGS) $(DEBUG_FLAGS) -o $@ $+
 
 todo-list: $(OBJS)
-	$(CC) $(CCFLAGS) $(LDFLAGS) -o $@ $+
+	$(CC) $(CCFLAGS) -o $@ $+ $(LDFLAGS)
 
 %.o:%.cpp
 	$(CC) $(CCFLAGS) $(DEBUG_FLAGS) -c -o $@ $<
