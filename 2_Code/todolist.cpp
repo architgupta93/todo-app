@@ -286,6 +286,33 @@ bool ToDoList::remove_todo_entry(ToDoListEntry* list_entry)
     return true;
 }
 
+void ToDoList::save_list(std::string filename){
+    // Write all the todo-list entries into a file.
+    try
+    {
+        // Try opening a file pipe to write the todo-list entries
+    }
+    catch (std::exception e)
+    {
+    
+    }
+}
+
+bool ToDoList::load_list(std::string filename){
+    // Save all the todo-list entries from a file.
+    try
+    {
+        // If the file exists, try writing the todo-list entries into it.
+    
+    }
+    catch (std::exception e)
+    {
+    
+        return false;
+    }
+    return true;
+}
+
 void ToDoList::new_todo_entry(std::string todo_message)
 {
     // If the todo-list is empty at this point, both first and last entries

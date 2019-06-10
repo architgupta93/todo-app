@@ -83,6 +83,8 @@ class ToDoList
         todo_message);
         bool remove_todo_entry(ToDoListEntry* list_entry);
         ToDoListEntry* get_list_top(){ return first_todo_entry; }
+        void save_list(std::string filename);
+        bool load_list(std::string filename);
 
     private:
         ToDoListEntry* first_todo_entry;
