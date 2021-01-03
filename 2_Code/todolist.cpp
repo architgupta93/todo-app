@@ -365,7 +365,10 @@ todo_message)
 
 SampleToDoList::SampleToDoList()
 {
+    new_todo_entry("Write mails to the thesis committee about qual exam dates");
+    new_todo_entry("Look at the quals presentations, think about work that needs to be done next");
+    new_todo_entry("Return library books.");
+    new_todo_entry("Write a thank-you note for the donors.");
     new_todo_entry("Complete the ToDo Application");
-    new_todo_entry("Generate the results for STEAM chapter in Masters thesis");
     //new_todo_entry("");
 }
